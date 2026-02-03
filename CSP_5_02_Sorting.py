@@ -2,28 +2,26 @@ import random
 
 
 def bubbleSort(items: list):
-    swaps = 0
-    comparisons = 0
+    swaps = comparisons = 0
     n = len(items)
-
     for i in range(n):
+        swapped = False
         for j in range(0, n - i - 1):
             comparisons += 1
             if items[j] > items[j + 1]:
                 items[j], items[j + 1] = items[j + 1], items[j]
                 swaps += 1
-
+                swapped = True
+        if not swapped:
+            break
     return items, swaps, comparisons
 
 
 def insertionSort(items: list):
-    swaps = 0
-    comparisons = 0
-
+    swaps = comparisons = 0
     for i in range(1, len(items)):
         key = items[i]
         j = i - 1
-
         while j >= 0:
             comparisons += 1
             if items[j] > key:
@@ -32,11 +30,8 @@ def insertionSort(items: list):
                 j -= 1
             else:
                 break
-
         items[j + 1] = key
-
     return items, swaps, comparisons
-
 
 def selectionSort(items: list):
     swaps = 0
