@@ -1,13 +1,16 @@
 import random
 from typing import List, Tuple
 
+# -------------------------------------------------
+# Bubble Sort
+# -------------------------------------------------
 def bubbleSort(items: List[int]) -> Tuple[List[int], int, int]:
     """Sort a list using bubble sort and count swaps & comparisons."""
     swaps = comparisons = 0
-    items = items.copy()               # keep the original list untouched
+    items = items.copy()
     n = len(items)
 
-    for i in range(n):
+    for i in range(n - 1):  # optimized
         swapped = False
         for j in range(0, n - i - 1):
             comparisons += 1
@@ -15,60 +18,89 @@ def bubbleSort(items: List[int]) -> Tuple[List[int], int, int]:
                 items[j], items[j + 1] = items[j + 1], items[j]
                 swaps += 1
                 swapped = True
-        if not swapped:                 # list already sorted
+        if not swapped:
             break
+
     return items, swaps, comparisons
 
 
+# -------------------------------------------------
+# Insertion Sort
+# -------------------------------------------------
 def insertionSort(items: List[int]) -> Tuple[List[int], int, int]:
-    """Sort a list using insertion sort and count swaps & comparisons."""
-    swaps = comparisons = 0
+    """Sort a list using insertion sort and count shifts & comparisons."""
+    shifts = comparisons = 0
     items = items.copy()
+
     for i in range(1, len(items)):
         key = items[i]
         j = i - 1
+
         while j >= 0:
-            comparisons += 1          # compare items[j] with key
+            comparisons += 1
             if items[j] > key:
                 items[j + 1] = items[j]
-                swaps += 1
+                shifts += 1   # shift, not swap
                 j -= 1
             else:
                 break
-        items[j + 1] = key
-    return items, swaps, comparisons
 
+        items[j + 1] = key
+
+    return items, shifts, comparisons
+
+
+# -------------------------------------------------
+# Selection Sort
+# -------------------------------------------------
 def selectionSort(items: List[int]) -> Tuple[List[int], int, int]:
     """Sort a list using selection sort and count swaps & comparisons."""
     swaps = comparisons = 0
     items = items.copy()
     n = len(items)
 
-    for i in range(n):
+    for i in range(n - 1):  # optimized
         min_index = i
         for j in range(i + 1, n):
             comparisons += 1
             if items[j] < items[min_index]:
                 min_index = j
+
         if min_index != i:
             items[i], items[min_index] = items[min_index], items[i]
             swaps += 1
+
     return items, swaps, comparisons
 
 
 # -------------------------------------------------
-# Simple test driver
+# Helper to print results cleanly
+# -------------------------------------------------
+def printResults(name: str, result: Tuple[List[int], int, int]):
+    sorted_list, moves, comparisons = result
+    print(f"{name}:")
+    print(f"  Sorted list  = {sorted_list}")
+    print(f"  Moves        = {moves}")  # swaps or shifts
+    print(f"  Comparisons  = {comparisons}\n")
+
+
+# -------------------------------------------------
+# Test Driver (Answers the “questions”)
 # -------------------------------------------------
 if __name__ == "__main__":
+
+    print("=== Worst Case (Reverse Sorted List) ===")
     y = [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-    print(f"Bubble sort   : {bubbleSort(y)}")
-    print(f"Insertion sort: {insertionSort(y)}")
-    print(f"Selection sort: {selectionSort(y)}\n")
+    printResults("Bubble Sort", bubbleSort(y))
+    printResults("Insertion Sort", insertionSort(y))
+    printResults("Selection Sort", selectionSort(y))
 
+
+    print("=== Random List ===")
     x = list(range(50))
     random.shuffle(x)
 
-    print(f"Bubble sort   : {bubbleSort(x)}")
-    print(f"Insertion sort: {insertionSort(x)}")
-    print(f"Selection sort: {selectionSort(x)}")
+    printResults("Bubble Sort", bubbleSort(x))
+    printResults("Insertion Sort", insertionSort(x))
+    printResults("Selection Sort", selectionSort(x))
